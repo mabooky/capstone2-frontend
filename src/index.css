@@ -4,26 +4,87 @@
 :root {
     --bg: #eeeaf6;
     --ink: #22204a;
-    --mute: #6f6b93;
+    /* 보조 글자색입니다. 배경 그라데이션과 유리가 겹친 가장 어려운 곳에서도 4.5:1 이상이 나오도록 기존(#6f6b93)보다 어둡게 했어요. */
+    --mute: #5e5a82;
     --acc: #3b4bff;
     --accink: #ffffff;
     --card: #ffffff;
     --line: #d8d3ea;
     --lemon: #f5e663;
-    --err: #c62828;
+    /* 오류 글자색입니다. 오류 안내의 옅은 붉은 배경 위에서도 4.5:1 이상이 나오도록 기존(#c62828)보다 조금 어둡게 했어요. */
+    --err: #b71c1c;
+
+    /* 유리 재질: 위의 색에서 투명도만 바꾼 파생값입니다. */
+    --glass-fill: color-mix(in srgb, var(--card) 72%, transparent);
+    --glass-fill-strong: color-mix(in srgb, var(--card) 86%, transparent);
+    --glass-tint: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--acc) 6%, transparent),
+        color-mix(in srgb, var(--lemon) 5%, transparent) 70%
+    );
+    /* 재생 중인 곡의 LP 색을 유리 틴트로 쓸 때의 밝기와 세기입니다. (glass-hue) */
+    --hue-l: 55%;
+    --hue-a1: 0.14;
+    --hue-a2: 0.08;
+    /* 왼쪽 위에서 빛이 스치는 듯한 하이라이트입니다. */
+    --glass-sheen: radial-gradient(120% 90% at 0% 0%, rgb(255 255 255 / 0.4), transparent 55%);
+    --glass-edge: color-mix(in srgb, #fff 62%, transparent);
+    --glass-shadow: 0 10px 34px color-mix(in srgb, var(--ink) 10%, transparent);
+    --glass-blur: 14px;
+
+    /* 입력창과 버튼의 경계선입니다. 배경과 3:1 안팎의 대비가 나오게 했어요. */
+    --field-edge: color-mix(in srgb, var(--ink) 52%, var(--bg));
+    /* 기본 버튼의 광택입니다. 위쪽을 너무 밝게 하면 흰 글자의 대비가 떨어져서 8%까지만 올려요. */
+    --btn-sheen-top: rgb(255 255 255 / 0.08);
+    --btn-sheen-bottom: rgb(0 0 0 / 0.1);
+
+    /* 배경에 깔리는 희미한 그라데이션의 세기입니다. */
+    --ambient-acc: 16%;
+    --ambient-lemon: 20%;
+    --ambient-acc-low: 14%;
+
     color-scheme: light dark;
+}
+
+@media (min-width: 600px) {
+    :root {
+        --glass-blur: 20px;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #14132b;
         --ink: #ece9ff;
-        --mute: #9b97c4;
+        --mute: #b0acd8;
         --acc: #8c97ff;
         --accink: #14132b;
         --card: #1e1d3d;
         --line: #322f5e;
         --err: #ff8a80;
+
+        --glass-fill: color-mix(in srgb, var(--card) 76%, transparent);
+        --glass-fill-strong: color-mix(in srgb, var(--card) 84%, transparent);
+        --glass-tint: linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--acc) 12%, transparent),
+            color-mix(in srgb, var(--lemon) 5%, transparent) 70%
+        );
+        /* 다크에서는 곡 색 틴트가 밝으면 흰 글자의 대비가 떨어지므로 어두운 톤으로 깔아요. */
+        --hue-l: 30%;
+        --hue-a1: 0.32;
+        --hue-a2: 0.18;
+        --glass-sheen: radial-gradient(120% 90% at 0% 0%, rgb(255 255 255 / 0.1), transparent 55%);
+        --glass-edge: color-mix(in srgb, #fff 16%, transparent);
+        --glass-shadow: 0 10px 34px rgb(0 0 0 / 0.38);
+
+        --field-edge: color-mix(in srgb, var(--mute) 72%, var(--bg));
+        --btn-sheen-top: rgb(255 255 255 / 0.14);
+        --btn-sheen-bottom: rgb(0 0 0 / 0.08);
+
+        --ambient-acc: 24%;
+        --ambient-lemon: 9%;
+        --ambient-acc-low: 18%;
     }
 }
 
@@ -38,6 +99,20 @@
     --breakpoint-expanded: 840px;
     --breakpoint-large: 1200px;
     --breakpoint-xlarge: 1600px;
+
+    /* 글자 크기입니다. 가장 작은 글자도 14px이 되도록 Tailwind 기본값보다 한 단계씩 키웠어요. (rem이라 브라우저 설정을 따라요.) */
+    --text-xs: 0.875rem;
+    --text-xs--line-height: 1.5;
+    --text-sm: 1rem;
+    --text-sm--line-height: 1.5;
+    --text-base: 1.0625rem;
+    --text-base--line-height: 1.55;
+    --text-lg: 1.1875rem;
+    --text-lg--line-height: 1.45;
+    --text-xl: 1.375rem;
+    --text-xl--line-height: 1.35;
+    --text-3xl: 2rem;
+    --text-3xl--line-height: 1.2;
 }
 
 /* 토큰을 Tailwind 유틸리티(bg-bg, text-ink, border-line, ...)로 쓸 수 있게 연결합니다. */
@@ -64,9 +139,26 @@ body {
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    line-height: 1.5;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    /* 한글이 단어 중간에서 끊기지 않게 해요. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 유리가 비춰 보일 바탕입니다. 같은 팔레트의 색을 아주 옅게 깔아요. 움직임은 없어요. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(48% 42% at 8% 4%, color-mix(in srgb, var(--acc) var(--ambient-acc), transparent), transparent 70%),
+        radial-gradient(42% 38% at 96% 12%, color-mix(in srgb, var(--lemon) var(--ambient-lemon), transparent), transparent 70%),
+        radial-gradient(52% 46% at 70% 100%, color-mix(in srgb, var(--acc) var(--ambient-acc-low), transparent), transparent 70%);
 }
 
 button {
@@ -74,7 +166,161 @@ button {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+[tabindex]:focus-visible {
     outline: 3px solid var(--acc);
     outline-offset: 2px;
+}
+
+/* ---- 유리 재질 ---- */
+
+/** 패널용 유리입니다. 뒤의 배경이 흐리게 비치고, 가장자리에 빛이 맺혀요. */
+@utility glass {
+    background:
+        var(--glass-sheen),
+        var(--glass-tint),
+        var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    border: 1px solid var(--glass-edge);
+    box-shadow:
+        inset 0 1px 0 var(--glass-edge),
+        inset 0 -1px 0 color-mix(in srgb, var(--ink) 6%, transparent),
+        var(--glass-shadow);
+}
+
+/** 재생 중인 곡의 색(--glass-hue, 0~359)을 유리 틴트로 입힙니다. glass와 함께 써요. */
+@utility glass-hue {
+    --glass-tint: linear-gradient(
+        135deg,
+        hsl(var(--glass-hue) 75% var(--hue-l) / var(--hue-a1)),
+        hsl(calc(var(--glass-hue) + 50) 80% var(--hue-l) / var(--hue-a2)) 70%
+    );
+}
+
+/** 토스트처럼 위에 떠서 글자가 더 또렷해야 하는 유리입니다. */
+@utility glass-strong {
+    background:
+        var(--glass-sheen),
+        var(--glass-tint),
+        var(--glass-fill-strong);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    border: 1px solid var(--glass-edge);
+    box-shadow:
+        inset 0 1px 0 var(--glass-edge),
+        inset 0 -1px 0 color-mix(in srgb, var(--ink) 8%, transparent),
+        0 14px 40px color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+/* ---- 컨트롤 ---- */
+
+@utility btn {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.875rem;
+    padding-inline: 1.25rem;
+    font-weight: 700;
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease;
+    &:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+/** 가장 중요한 동작 버튼입니다. 색은 그대로 두고 위아래로 살짝 빛과 그늘을 넣었어요. */
+@utility btn-primary {
+    background:
+        linear-gradient(180deg, var(--btn-sheen-top), var(--btn-sheen-bottom)),
+        var(--acc);
+    color: var(--accink);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.3),
+        0 6px 18px color-mix(in srgb, var(--acc) 32%, transparent);
+}
+
+/** 보조 버튼입니다. 유리 알약 모양이에요. */
+@utility btn-glass {
+    background: var(--glass-fill-strong);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+    border: 1px solid var(--field-edge);
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 var(--glass-edge);
+}
+
+/** 되돌리기 어려운 동작을 확인받을 때 쓰는 버튼입니다. */
+@utility btn-danger {
+    background: color-mix(in srgb, var(--err) 12%, var(--card));
+    border: 1px solid var(--err);
+    color: var(--err);
+}
+
+@utility field {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 0.875rem;
+    border: 1px solid var(--field-edge);
+    background: color-mix(in srgb, var(--card) 72%, transparent);
+    padding: 0.625rem 0.875rem;
+    color: var(--ink);
+    &::placeholder {
+        color: var(--mute);
+    }
+}
+
+/* ---- 접근성 폴백: 유리를 끄고 불투명하게 ---- */
+
+/* backdrop-filter를 지원하지 않는 브라우저 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root {
+        --glass-fill: color-mix(in srgb, var(--card) 94%, transparent);
+        --glass-fill-strong: color-mix(in srgb, var(--card) 97%, transparent);
+    }
+}
+
+/* 투명도 줄이기, 고대비를 원하는 사용자 */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    :root {
+        --glass-fill: var(--card);
+        --glass-fill-strong: var(--card);
+        --glass-tint: none;
+        --glass-sheen: none;
+        --glass-edge: color-mix(in srgb, var(--ink) 55%, transparent);
+        --field-edge: var(--ink);
+    }
+    .glass,
+    .glass-strong,
+    .btn-glass {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+    body::before {
+        display: none;
+    }
+}
+
+/* 윈도우 고대비 모드 등 시스템 색을 강제하는 환경 */
+@media (forced-colors: active) {
+    .glass,
+    .glass-strong,
+    .btn-glass {
+        background: Canvas;
+        border: 1px solid CanvasText;
+        box-shadow: none;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+    body::before {
+        display: none;
+    }
 }

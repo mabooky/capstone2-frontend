@@ -19,7 +19,7 @@ type Props = {
 }
 
 const SIZE = 400
-const PAD = 24
+const PAD = 34
 const HALF = SIZE / 2 - PAD
 const toX = (valence: number) => SIZE / 2 + valence * HALF
 const toY = (arousal: number) => SIZE / 2 - arousal * HALF
@@ -124,7 +124,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
     const hovered = listTracks?.find((track) => track.spotifyId === hoveredId)
 
     return (
-        <section aria-label="기준점 선택" className="space-y-4 rounded-[14px] border border-line bg-card p-4">
+        <section aria-label="기준점 선택" className="glass space-y-4 rounded-[24px] p-4 medium:p-5">
             <div>
                 <h2 className="text-sm text-mute">기준점</h2>
                 <p className="mt-1 text-sm">
@@ -143,7 +143,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                         onPointerDown={onPointerDown}
                         onPointerMove={onPointerMove}
                         onKeyDown={onKeyDown}
-                        className="mx-auto aspect-square w-full max-w-[520px] cursor-crosshair touch-none rounded-[10px] border border-line bg-bg select-none"
+                        className="mx-auto aspect-square w-full max-w-[520px] cursor-crosshair touch-none rounded-[20px] border border-line bg-bg/70 select-none"
                     >
                         {GRID.map((g) => (
                             <g key={g}>
@@ -220,16 +220,16 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                             strokeWidth={3}
                         />
 
-                        <text x={PAD + 2} y={SIZE / 2 - 6} fontSize={14} className="fill-mute">
+                        <text x={PAD + 4} y={SIZE / 2 - 8} fontSize={18} className="fill-mute">
                             부정
                         </text>
-                        <text x={SIZE - PAD - 2} y={SIZE / 2 - 6} fontSize={14} textAnchor="end" className="fill-mute">
+                        <text x={SIZE - PAD - 4} y={SIZE / 2 - 8} fontSize={18} textAnchor="end" className="fill-mute">
                             긍정
                         </text>
-                        <text x={SIZE / 2 + 8} y={PAD - 8} fontSize={14} className="fill-mute">
+                        <text x={SIZE / 2 + 8} y={PAD - 12} fontSize={18} className="fill-mute">
                             활기
                         </text>
-                        <text x={SIZE / 2 + 8} y={SIZE - 8} fontSize={14} className="fill-mute">
+                        <text x={SIZE / 2 + 8} y={SIZE - 12} fontSize={18} className="fill-mute">
                             차분
                         </text>
                     </svg>
@@ -261,7 +261,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                                 step={0.01}
                                 value={value.valence}
                                 onChange={(event) => edit({ valence: round2(Number(event.target.value)) })}
-                                className="w-full accent-acc"
+                                className="h-11 w-full cursor-pointer accent-acc"
                             />
                         </label>
                         <label className="block">
@@ -276,7 +276,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                                 step={0.01}
                                 value={value.arousal}
                                 onChange={(event) => edit({ arousal: round2(Number(event.target.value)) })}
-                                className="w-full accent-acc"
+                                className="h-11 w-full cursor-pointer accent-acc"
                             />
                         </label>
                         <label className="block">
@@ -291,7 +291,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                                 step={1}
                                 value={value.n}
                                 onChange={(event) => edit({ n: Number(event.target.value) })}
-                                className="w-full accent-acc"
+                                className="h-11 w-full cursor-pointer accent-acc"
                             />
                         </label>
                     </div>
@@ -303,7 +303,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                             type="button"
                             onClick={apply}
                             disabled={!dirty || applying}
-                            className="min-h-11 rounded-[10px] bg-acc px-5 font-bold text-accink disabled:opacity-40"
+                            className="btn btn-primary"
                         >
                             {applying ? '적용하는 중이에요…' : '기준점 적용'}
                         </button>
@@ -314,7 +314,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                                 setPreview(undefined)
                             }}
                             disabled={draft === null || applying}
-                            className="min-h-11 rounded-[10px] border border-line bg-card px-5 font-bold disabled:opacity-40"
+                            className="btn btn-glass"
                         >
                             되돌리기
                         </button>
@@ -337,7 +337,7 @@ export default function MoodPicker({ api, token, onUnauthorized, mood, catalog, 
                             <p className="text-sm text-mute">신청할 수 있는 곡이 없어요.</p>
                         ) : (
                             <ol
-                                className={`max-h-80 overflow-y-auto rounded-[10px] border border-line ${
+                                className={`max-h-80 overflow-y-auto rounded-[18px] border border-line bg-card/40 ${
                                     stale ? 'opacity-60' : ''
                                 }`}
                             >

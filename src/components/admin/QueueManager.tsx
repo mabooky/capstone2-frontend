@@ -27,7 +27,7 @@ export default function QueueManager({ queue, onRemove }: Props) {
     }
 
     return (
-        <section aria-label="대기열 관리" className="overflow-hidden rounded-[14px] border border-line bg-card">
+        <section aria-label="대기열 관리" className="glass overflow-hidden rounded-[24px]">
             <h2 className="px-4 pt-4 text-sm text-mute">
                 대기열 <span className="tabular-nums">{queue.length}</span>곡
             </h2>
@@ -51,11 +51,7 @@ export default function QueueManager({ queue, onRemove }: Props) {
                                 type="button"
                                 onClick={() => press(entry)}
                                 aria-label={`${entry.track.title} 삭제`}
-                                className={`min-h-10 rounded-[10px] border px-3 text-sm ${
-                                    armedId === entry.queueId
-                                        ? 'border-err bg-err/10 font-bold text-err'
-                                        : 'border-line text-mute'
-                                }`}
+                                className={`btn px-3 text-sm ${armedId === entry.queueId ? 'btn-danger' : 'btn-glass'}`}
                             >
                                 {armedId === entry.queueId ? '정말 삭제?' : '삭제'}
                             </button>

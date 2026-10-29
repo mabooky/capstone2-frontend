@@ -106,7 +106,7 @@ function AdminConsole({ api, storeId, token, onLogout, onUnauthorized }: Console
                         <button
                             type="button"
                             onClick={onLogout}
-                            className="min-h-10 rounded-[10px] border border-line bg-card px-3"
+                            className="btn btn-glass px-4"
                         >
                             로그아웃
                         </button>

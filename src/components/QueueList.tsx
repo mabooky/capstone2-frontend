@@ -11,7 +11,7 @@ export default function QueueList({ queue }: Props) {
     const hiddenOnSmall = queue.filter((entry, index) => index >= COMPACT_ROWS && !entry.mine).length
 
     return (
-        <section aria-label="대기열" className="overflow-hidden rounded-[14px] border border-line bg-card">
+        <section aria-label="대기열" className="glass overflow-hidden rounded-[24px]">
             <h2 className="px-4 pt-4 text-sm text-mute">
                 대기열 <span className="tabular-nums">{queue.length}</span>곡
             </h2>

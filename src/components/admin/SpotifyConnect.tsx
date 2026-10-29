@@ -16,15 +16,13 @@ const DESCRIPTION: Record<SpotifyConnection['status'], string> = {
     error: '지금은 소리 없이 데모로 재생해요. 아래 문제를 해결한 뒤 다시 연결해 주세요.',
 }
 
-const button = 'min-h-11 rounded-[10px] px-5 font-bold disabled:opacity-40'
-
 /** 소리를 실제로 낼지(Spotify), 소리 없이 데모로 재생할지 정하는 영역입니다. */
 export default function SpotifyConnect({ connection, busy }: Props) {
     const { status, message, connect, disconnect } = connection
     const connected = status === 'ready'
 
     return (
-        <section aria-label="소리 재생" className="space-y-3 rounded-[14px] border border-line bg-card p-4">
+        <section aria-label="소리 재생" className="glass space-y-3 rounded-[24px] p-4 medium:p-5">
             <div className="flex items-center justify-between gap-3">
                 <h2 className="text-sm text-mute">소리 재생</h2>
                 <span
@@ -47,7 +45,7 @@ export default function SpotifyConnect({ connection, busy }: Props) {
                             type="button"
                             onClick={connect}
                             disabled={busy}
-                            className={`${button} bg-acc text-accink`}
+                            className="btn btn-primary"
                         >
                             {status === 'error' ? '다시 연결' : 'Spotify 연결'}
                         </button>
@@ -57,7 +55,7 @@ export default function SpotifyConnect({ connection, busy }: Props) {
                             type="button"
                             onClick={disconnect}
                             disabled={busy}
-                            className={`${button} border border-line bg-card`}
+                            className="btn btn-glass"
                         >
                             연결 해제
                         </button>

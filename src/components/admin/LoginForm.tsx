@@ -34,7 +34,7 @@ export default function LoginForm({ storeId, onLogin, notice }: Props) {
         <main className="flex min-h-svh items-center justify-center px-4 py-10">
             <form
                 onSubmit={submit}
-                className="w-full max-w-sm space-y-4 rounded-2xl border border-line bg-card p-7"
+                className="glass-strong w-full max-w-sm space-y-4 rounded-[28px] p-7"
             >
                 <div>
                     <h1 className="text-3xl font-extrabold tracking-tight">관리자 로그인</h1>
@@ -51,7 +51,7 @@ export default function LoginForm({ storeId, onLogin, notice }: Props) {
                         onChange={(event) => setPassword(event.target.value)}
                         autoComplete="current-password"
                         autoFocus
-                        className="block w-full rounded-[10px] border border-line bg-bg px-3 py-3 text-ink"
+                        className="field"
                     />
                 </label>
 
@@ -60,7 +60,7 @@ export default function LoginForm({ storeId, onLogin, notice }: Props) {
                 <button
                     type="submit"
                     disabled={password === '' || submitting}
-                    className="min-h-12 w-full rounded-[10px] bg-acc font-bold text-accink disabled:opacity-40"
+                    className="btn btn-primary min-h-12 w-full"
                 >
                     {submitting ? '로그인하는 중이에요…' : '로그인'}
                 </button>

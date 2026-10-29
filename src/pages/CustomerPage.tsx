@@ -77,7 +77,7 @@ export default function CustomerPage({ api, storeId }: Props) {
                                 receivedAt={queue.receivedAt}
                             />
                         ) : (
-                            <p className="rounded-[14px] border border-line bg-card p-4 text-mute">
+                            <p className="glass rounded-[24px] p-4 text-mute">
                                 불러오는 중이에요…
                             </p>
                         )}
@@ -91,7 +91,7 @@ export default function CustomerPage({ api, storeId }: Props) {
                             onChange={(event) => setQuery(event.target.value)}
                             placeholder="제목이나 아티스트로 찾아봐요"
                             aria-label="곡 검색"
-                            className="block w-full rounded-[10px] border border-line bg-card px-3 py-3 text-ink placeholder:text-mute"
+                            className="field"
                         />
 
                         <h2 className="px-1 text-sm text-mute">
@@ -116,7 +116,7 @@ export default function CustomerPage({ api, storeId }: Props) {
                                 <button
                                     type="button"
                                     onClick={list.reload}
-                                    className="min-h-11 rounded-[10px] border border-line bg-card px-4 font-bold"
+                                    className="btn btn-glass"
                                 >
                                     다시 불러오기
                                 </button>
@@ -126,7 +126,7 @@ export default function CustomerPage({ api, storeId }: Props) {
                         {list.loading && <p className="px-1 text-mute">불러오는 중이에요…</p>}
 
                         {!list.loading && !list.error && list.tracks.length === 0 && (
-                            <p className="rounded-[14px] border border-line bg-card p-6 text-center text-mute">
+                            <p className="glass rounded-[24px] p-6 text-center text-mute">
                                 {searchQuery
                                     ? '찾는 곡이 없어요. 다른 검색어로 찾아보세요.'
                                     : '지금 신청할 수 있는 곡이 없어요.'}
@@ -134,7 +134,7 @@ export default function CustomerPage({ api, storeId }: Props) {
                         )}
 
                         {list.tracks.length > 0 && (
-                            <ul className="overflow-hidden rounded-[14px] border border-line bg-card xlarge:grid xlarge:grid-cols-2 [&>li:last-child]:border-b-0">
+                            <ul className="glass overflow-hidden rounded-[24px] xlarge:grid xlarge:grid-cols-2 [&>li:last-child]:border-b-0">
                                 {list.tracks.map((track) => (
                                     <TrackRow
                                         key={track.spotifyId}

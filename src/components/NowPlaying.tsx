@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import type { NowPlayingEntry } from '../api/types.ts'
 import { useNow } from '../hooks/useNow.ts'
 import { formatDuration } from '../lib/format.ts'
@@ -20,7 +21,7 @@ export default function NowPlaying({ nowPlaying, serverTime, receivedAt }: Props
         return (
             <section
                 aria-label="재생 중"
-                className="flex items-center gap-4 rounded-[14px] border border-line bg-card p-4 expanded:flex-col expanded:gap-5 expanded:p-6"
+                className="glass flex items-center gap-4 rounded-[24px] p-4 expanded:flex-col expanded:gap-5 expanded:p-6"
             >
                 <Disc hue={235} className="size-24 shrink-0 medium:size-32 expanded:size-56 xlarge:size-64" />
                 <p className="text-mute">아직 재생 중인 곡이 없어요.</p>
@@ -33,13 +34,18 @@ export default function NowPlaying({ nowPlaying, serverTime, receivedAt }: Props
     const elapsed = Math.min(Math.max(serverTime - startedAt + (now - receivedAt), 0), track.duration)
     const percent = track.duration > 0 ? (elapsed / track.duration) * 100 : 0
 
+    // 곡의 LP 색을 옅게 유리 틴트에 입혀서, 곡이 바뀌면 카드의 분위기도 함께 바뀌어요. (세기는 대비가 유지되도록 CSS가 정해요.)
+    const hue = hueFor(track.spotifyId)
+    const hueStyle = { '--glass-hue': hue } as CSSProperties
+
     return (
         <section
             aria-label="재생 중"
-            className="flex items-center gap-4 rounded-[14px] border border-line bg-card p-4 expanded:flex-col expanded:gap-5 expanded:p-6"
+            style={hueStyle}
+            className="glass glass-hue flex items-center gap-4 rounded-[24px] p-4 expanded:flex-col expanded:gap-5 expanded:p-6"
         >
             <Disc
-                hue={hueFor(track.spotifyId)}
+                hue={hue}
                 spinning
                 className="size-24 shrink-0 medium:size-32 expanded:size-56 xlarge:size-64"
             />

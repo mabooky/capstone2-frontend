@@ -38,7 +38,7 @@ export default function TrackRow({ track, canRequest, requesting, onRequest }: P
                     disabled={!canRequest || requesting}
                     title={canRequest ? undefined : '이미 신청한 곡이 있어요'}
                     onClick={() => onRequest(track)}
-                    className="min-h-11 min-w-[4.5rem] rounded-[10px] bg-acc px-4 font-bold text-accink disabled:opacity-40"
+                    className="btn btn-primary min-w-[5rem] px-4"
                 >
                     {requesting ? '신청 중…' : '신청'}
                 </button>

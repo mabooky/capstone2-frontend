@@ -39,7 +39,7 @@ export default function SpotifyCallbackPage() {
                     {failure.storeId && (
                         <a
                             href={`/${encodeURIComponent(failure.storeId)}/admin`}
-                            className="flex min-h-11 items-center rounded-[10px] bg-acc px-5 font-bold text-accink"
+                            className="btn btn-primary"
                         >
                             관리자 화면으로 돌아가기
                         </a>

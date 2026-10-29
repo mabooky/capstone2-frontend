@@ -13,8 +13,8 @@ type Props = {
     onStop: () => void
 }
 
-const primary = 'min-h-11 rounded-[10px] bg-acc px-5 font-bold text-accink disabled:opacity-40'
-const secondary = 'min-h-11 rounded-[10px] border border-line bg-card px-5 font-bold disabled:opacity-40'
+const primary = 'btn btn-primary'
+const secondary = 'btn btn-glass'
 
 /** 지금 재생 중인 곡과 재생 조작 버튼입니다. */
 export default function PlayerPanel({ snapshot, receivedAt, status, message, onStart, onSkip, onStop }: Props) {
@@ -26,7 +26,7 @@ export default function PlayerPanel({ snapshot, receivedAt, status, message, onS
             {snapshot && receivedAt !== undefined ? (
                 <NowPlaying nowPlaying={snapshot.nowPlaying} serverTime={snapshot.serverTime} receivedAt={receivedAt} />
             ) : (
-                <p className="rounded-[14px] border border-line bg-card p-4 text-mute">불러오는 중이에요…</p>
+                <p className="glass rounded-[24px] p-4 text-mute">불러오는 중이에요…</p>
             )}
 
             <div className="flex flex-wrap gap-2">
@@ -47,7 +47,7 @@ export default function PlayerPanel({ snapshot, receivedAt, status, message, onS
             </div>
 
             {message && (
-                <p role="status" className="rounded-[10px] border border-line bg-card p-3 text-sm text-mute">
+                <p role="status" className="glass rounded-[16px] p-3.5 text-sm text-mute">
                     {message}
                 </p>
             )}

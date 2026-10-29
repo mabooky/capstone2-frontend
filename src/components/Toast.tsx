@@ -11,8 +11,8 @@ export default function Toast({ toast }: { toast: ToastMessage | undefined }) {
             {toast && (
                 <p
                     key={toast.id}
-                    className={`max-w-md rounded-[10px] border px-4 py-3 text-sm shadow-lg ${
-                        toast.tone === 'error' ? 'border-err bg-card text-err' : 'border-line bg-card text-ink'
+                    className={`glass-strong max-w-md rounded-[18px] px-5 py-3.5 text-sm ${
+                        toast.tone === 'error' ? 'border-err! text-err' : 'text-ink'
                     }`}
                 >
                     {toast.text}
