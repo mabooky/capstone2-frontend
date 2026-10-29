@@ -1,0 +1,11 @@
+{
+    // Cloudflare Workers의 정적 자산 배포 설정입니다. Worker 코드 없이 빌드 결과(dist)만 올려요.
+    // name은 Cloudflare 대시보드에서 연결한 Worker의 이름과 같아야 합니다.
+    "name": "capstone2-frontend",
+    "compatibility_date": "2026-10-29",
+    "assets": {
+        "directory": "./dist",
+        // 어떤 경로(/1, /1/admin, /auth/spotify/callback)로 들어와도 index.html을 200으로 돌려줘서 SPA가 경로를 해석해요.
+        "not_found_handling": "single-page-application"
+    }
+}

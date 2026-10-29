@@ -1,111 +1,80 @@
+@import 'tailwindcss';
+
+/* 디자인 토큰입니다. 시스템의 라이트/다크 설정을 자동으로 따릅니다. */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+    --bg: #eeeaf6;
+    --ink: #22204a;
+    --mute: #6f6b93;
+    --acc: #3b4bff;
+    --accink: #ffffff;
+    --card: #ffffff;
+    --line: #d8d3ea;
+    --lemon: #f5e663;
+    --err: #c62828;
+    color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+    :root {
+        --bg: #14132b;
+        --ink: #ece9ff;
+        --mute: #9b97c4;
+        --acc: #8c97ff;
+        --accink: #14132b;
+        --card: #1e1d3d;
+        --line: #322f5e;
+        --err: #ff8a80;
+    }
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+/*
+ * Material Design 3의 창 크기 구분입니다. 기본(접두사 없음)이 Compact(< 600)이고,
+ * medium:(600~839), expanded:(840~1199), large:(1200~1599), xlarge:(1600~)는 각 폭부터 적용됩니다.
+ * 작은 값부터 순서대로 적어야 큰 화면의 스타일이 뒤에 와서 덮어씁니다.
+ */
+@theme {
+    --breakpoint-*: initial;
+    --breakpoint-medium: 600px;
+    --breakpoint-expanded: 840px;
+    --breakpoint-large: 1200px;
+    --breakpoint-xlarge: 1600px;
+}
+
+/* 토큰을 Tailwind 유틸리티(bg-bg, text-ink, border-line, ...)로 쓸 수 있게 연결합니다. */
+@theme inline {
+    --color-bg: var(--bg);
+    --color-ink: var(--ink);
+    --color-mute: var(--mute);
+    --color-acc: var(--acc);
+    --color-accink: var(--accink);
+    --color-card: var(--card);
+    --color-line: var(--line);
+    --color-lemon: var(--lemon);
+    --color-err: var(--err);
+
+    --animate-disc: disc-spin 6s linear infinite;
+    @keyframes disc-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 }
 
 body {
-  margin: 0;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+button {
+    cursor: pointer;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--acc);
+    outline-offset: 2px;
 }
