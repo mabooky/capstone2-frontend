@@ -6,7 +6,13 @@ function fmt(ms){var x=Math.max(0,Math.floor(ms/1000));return Math.floor(x/60)+"
 
 var qs=new URLSearchParams(location.search);
 if(qs.get("store"))ls("sj.store",qs.get("store"));
-var STORE=qs.get("store")||C.STORE_ID||ls("sj.store")||"",ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
+var STORE=qs.get("store");
+if(!STORE){
+  $("cfg").textContent="잘못된 접근입니다. 매장 QR코드를 스캔해 주세요.";
+  $("app").style.display="none";
+  return;
+}
+var ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
 var token=ls("sj.token"),nick=ls("sj.nick")||"",hash=null,cat=[],now=null,queue=[],skew=0,me=null,hist={items:[],total:0},sr=null,polling=false;
 var LB={"out-of-mood":"범위 밖","already-queued":"대기 중","now-playing":"재생 중","recently-played":"최근 재생됨"};
 

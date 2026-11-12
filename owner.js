@@ -7,7 +7,14 @@ function num(x,lo,hi){x=parseFloat(x);return isNaN(x)?0:Math.max(lo,Math.min(hi,
 
 var qs=new URLSearchParams(location.search);
 if(qs.get("store"))ls("ad.store",qs.get("store"));
-var STORE=qs.get("store")||C.STORE_ID||ls("ad.store")||"",ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
+var STORE=qs.get("store");
+if(!STORE){
+  $("lerr").textContent="잘못된 접근입니다. 매장 QR코드를 스캔해 주세요.";
+  $("login").style.display="block";
+  $("app").style.display="none";
+  return;
+}
+var ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
 var adm=ls("ad.token"),hash=null,cat=[],now=null,queue=[],skew=0,polling=false;
 var cfg={mode:"seeds",seeds:[],vMin:-0.5,vMax:0.5,eMin:-0.5,eMax:0.5,n:30},sres=[],pv=[];
 
