@@ -32,9 +32,13 @@
     msgEl.textContent=text;
   }
 
+  /* state는 "<난수>.<매장ID>" 형식입니다. 매장 ID는 되돌아갈 주소에만 쓰므로 검증 전에 읽어도 됩니다. */
+  var storeId=(state||"").slice((state||"").lastIndexOf(".")+1);
+  if(!/^[0-9a-z]{8}$/.test(storeId))storeId="";
+
   function finish(){
     history.replaceState(null,"",location.pathname);
-    location.href="../../customer.html";
+    location.href="../../customer.html"+(storeId?"?store="+storeId:"");
   }
 
   if(!code){

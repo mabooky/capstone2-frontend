@@ -31,7 +31,8 @@ function msg(m){$("msg").textContent=m||""}
 function login(){
   if(!window.Kakao||!C.KAKAO_JS_KEY){$("cfg").textContent="카카오 로그인을 쓰려면 config.js에 KAKAO_JS_KEY를 채워 주세요.";return}
   if(!Kakao.isInitialized())Kakao.init(C.KAKAO_JS_KEY);
-  var st=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  /* 콜백 페이지는 주소에 ?store=를 붙일 수 없어서, state의 뒤쪽에 매장 ID를 실어 돌려받습니다. */
+  var st=Math.random().toString(36).slice(2)+Date.now().toString(36)+"."+STORE;
   try{sessionStorage.setItem("sj.kstate",st)}catch(e){}
   Kakao.Auth.authorize({redirectUri:C.KAKAO_REDIRECT_URI||location.origin+location.pathname,state:st});
 }
