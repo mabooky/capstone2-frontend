@@ -2,7 +2,7 @@
 window.APP_CONFIG = {
   API_ORIGIN: "https://capstone2-backend-production.up.railway.app/api",
   KAKAO_JS_KEY: "6f25b0a14141687ca7d92c03e8671464",
-  KAKAO_REDIRECT_URI: "https://capstone2-frontend.mabookyggl.workers.dev/auth/kakao/callback",
+  KAKAO_REDIRECT_URI: "https://capstone2-frontend.pages.dev/auth/kakao/callback",
   SPOTIFY_CLIENT_ID: "b154aff416734b2f99952df227402618",
-  SPOTIFY_REDIRECT_URI: "https://capstone2-frontend.mabookyggl.workers.dev/auth/spotify/callback"
+  SPOTIFY_REDIRECT_URI: "https://capstone2-frontend.pages.dev/auth/spotify/callback"
 };
