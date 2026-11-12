@@ -46,10 +46,26 @@
   var storeId=(state||"").slice((state||"").lastIndexOf(".")+1);
   if(!/^[0-9a-z]{8}$/.test(storeId))storeId="";
 
+  /* 원인 추적용 로그입니다. 인가 코드와 토큰의 값은 출력하지 않습니다. */
+  function log(){
+    console.log.apply(console,["[kakao-callback]"].concat([].slice.call(arguments)));
+  }
+
   function finish(){
     history.replaceState(null,"",location.pathname);
     location.href="../../customer.html"+(storeId?"?store="+storeId:"");
   }
+
+  log("콜백 진입",{
+    path:location.pathname,
+    error:qs.get("error"),
+    errorDescription:qs.get("error_description"),
+    codeLength:code?code.length:0,
+    stateNonceLength:(state||"").lastIndexOf(".")>0?state.lastIndexOf("."):0,
+    storeId:storeId||null,
+    apiOrigin:C.API_ORIGIN||null,
+    configuredRedirectUri:C.KAKAO_REDIRECT_URI||null
+  });
 
   if(!code){
     fail("로그인 정보가 없어요. 다시 시도해 주세요.");
@@ -58,6 +74,8 @@
 
   var savedState=null;
   try{savedState=sessionStorage.getItem("sj.kstate");sessionStorage.removeItem("sj.kstate")}catch(e){}
+
+  log("state 확인",{saved:!!savedState,matches:!!savedState&&state===savedState});
 
   if(!savedState||state!==savedState){
     fail("로그인 확인값이 달라 중단했어요. 다시 시도해 주세요.");
@@ -73,8 +91,10 @@
     body:JSON.stringify({code:code})
   })
   .then(function(r){
+    log("로그인 응답",{status:r.status});
     if(!r.ok){
       return r.json().then(function(j){
+        log("로그인 오류 응답",j);
         var err=(j&&j.error)||{};
         throw{status:r.status,code:err.code||"HTTP_"+r.status,message:err.message||"요청에 실패했어요."};
       });
@@ -82,6 +102,7 @@
     return r.json();
   })
   .then(function(j){
+    log("로그인 성공 응답",{hasToken:!!(j&&j.token),expiresAt:j&&j.expiresAt,nickname:j&&j.user&&j.user.nickname});
     if(!j||!j.token){
       fail("로그인 처리에 실패했어요. 다시 시도해 주세요.");
       return;
@@ -93,6 +114,7 @@
     finish();
   })
   .catch(function(e){
+    log("로그인 요청 실패",e);
     if(e.code==="INVALID_KAKAO_CODE"){
       fail("카카오 로그인에 실패했어요. 다시 시도해 주세요.");
     }else if(e.code==="KAKAO_UNAVAILABLE"){
