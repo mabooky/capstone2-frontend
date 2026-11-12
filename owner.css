@@ -66,3 +66,10 @@ th{position:sticky;top:0;background:var(--card)}
 .side{display:grid;gap:16px}
 .cols{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
 @media(max-width:860px){.cols{grid-template-columns:1fr}}
+
+.access-error{
+  position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;z-index:100
+}
+.access-error-content{text-align:center;max-width:380px}
+.access-error-content h1{font-size:1.8rem;margin:0 0 12px}
+.access-error-content p{color:var(--mute);margin:0;font-size:1rem}

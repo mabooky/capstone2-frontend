@@ -8,8 +8,7 @@ var qs=new URLSearchParams(location.search);
 if(qs.get("store"))ls("sj.store",qs.get("store"));
 var STORE=qs.get("store");
 if(!STORE){
-  $("cfg").textContent="잘못된 접근입니다. 매장 QR코드를 스캔해 주세요.";
-  $("app").style.display="none";
+  $("access-error").hidden=false;
   return;
 }
 var ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
