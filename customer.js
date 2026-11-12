@@ -2,6 +2,8 @@
 var C=window.APP_CONFIG||{},$=function(i){return document.getElementById(i)};
 function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}return null}
 function esc(x){return String(x==null?"":x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+/* 곡 제목에서 항상 같은 색조(0~359)를 만듭니다. 음반 레이블 색에 씁니다. */
+function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h%360}
 function fmt(ms){var x=Math.max(0,Math.floor(ms/1000));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")}
 
 var qs=new URLSearchParams(location.search);
@@ -55,7 +57,7 @@ $("acct").onclick=function(e){
 
 /* 화면 */
 function canReq(){return !!token&&(!me||me.canRequest!==false)}
-function trow(t,btn){return '<div class="row"><span class="who"><img class="cov" src="'+esc(t.albumImageUrl)+'" alt="" loading="lazy"><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(btn||"")+'</div>'}
+function trow(t,btn){return '<div class="row"><span class="who"><span class="cov" style="--h:'+hue(String(t.title))+'" aria-hidden="true"></span><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(btn||"")+'</div>'}
 function rbtn(t){var s=t.requestStatus;return '<button class="btn" data-id="'+esc(t.spotifyId)+'"'+(s==="available"&&canReq()?"":" disabled")+'>'+(s==="available"?"신청":LB[s]||"신청")+'</button>'}
 function renderAcct(){
   $("acct").innerHTML=token?'<span class="mute">'+esc(nick||"로그인됨")+' 님</span> <button class="btn sub" id="out">로그아웃</button>':'<button class="btn kakao" id="login">카카오로 로그인</button>';

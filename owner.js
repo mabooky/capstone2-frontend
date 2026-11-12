@@ -2,6 +2,8 @@
 var C=window.APP_CONFIG||{},$=function(i){return document.getElementById(i)};
 function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}return null}
 function esc(x){return String(x==null?"":x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+/* 곡 제목에서 항상 같은 색조(0~359)를 만듭니다. 음반 레이블 색에 씁니다. */
+function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h%360}
 function fmt(ms){var x=Math.max(0,Math.floor(ms/1000));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")}
 function num(x,lo,hi){x=parseFloat(x);return isNaN(x)?0:Math.max(lo,Math.min(hi,x))}
 
@@ -142,7 +144,7 @@ function draw(){
 }
 
 /* ───── 재생 상태·대기열 (GET /state 2초 폴링, 삭제는 DELETE /admin/queue/:id) ───── */
-function tr(t,right){return '<div class="row"><span class="who"><img class="cov" src="'+esc(t.albumImageUrl)+'" alt="" loading="lazy"><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(right||"")+'</div>'}
+function tr(t,right){return '<div class="row"><span class="who"><span class="cov" style="--h:'+hue(String(t.title))+'" aria-hidden="true"></span><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(right||"")+'</div>'}
 function renderNow(){
   $("np").innerHTML=now?tr(now.track,'<span class="badge s-ok">'+(now.source==="request"?"신청곡":"자동 재생")+'</span>')+'<div class="bar"><i id="fill"></i></div><div class="mute" id="pt"></div>':'<div class="mute">재생 중인 곡이 없어요.</div>';
   renderProg();

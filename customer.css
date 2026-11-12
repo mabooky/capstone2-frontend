@@ -36,7 +36,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 @media(max-width:760px){.cols{grid-template-columns:1fr}}
 .who{display:flex;gap:10px;align-items:center;min-width:0}
 .who>span{min-width:0;overflow-wrap:anywhere}
-.cov{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--line);flex:none}
+.cov{width:44px;height:44px;border-radius:50%;flex:none;background:radial-gradient(circle,var(--bg) 0 7%,hsl(var(--h,170) 65% 52%) 8% 26%,transparent 27%),repeating-radial-gradient(circle,rgba(255,255,255,.07) 0 1px,transparent 1px 3px),conic-gradient(var(--ink),#4a5a57,var(--ink),#4a5a57,var(--ink))}
 .kakao{background:#FEE500;color:#191919}
 .sc{max-height:340px;overflow:auto}
 .side{display:grid;gap:16px}
