@@ -15,9 +15,10 @@
 </head>
 <body>
 <div class="auth">
-  <div class="spinner"></div>
-  <h1>로그인 처리 중</h1>
+  <div class="spinner" id="spin"></div>
+  <h1 id="title">로그인 처리 중</h1>
   <p id="msg">카카오 로그인을 확인하고 있습니다.</p>
+  <button class="btn" id="back" style="margin-top:20px" hidden>돌아가기</button>
 </div>
 <script src="../config.js"></script>
 <script>
@@ -32,6 +33,15 @@
     msgEl.textContent=text;
   }
 
+  /* 실패하면 자동으로 이동하지 않고, 사용자가 확인한 뒤 돌아가기를 누르게 합니다. */
+  function fail(text){
+    document.getElementById("spin").hidden=true;
+    document.getElementById("title").textContent="로그인에 실패했어요";
+    showMsg(text);
+    document.getElementById("back").hidden=false;
+  }
+  document.getElementById("back").onclick=function(){finish()};
+
   /* state는 "<난수>.<매장ID>" 형식입니다. 매장 ID는 되돌아갈 주소에만 쓰므로 검증 전에 읽어도 됩니다. */
   var storeId=(state||"").slice((state||"").lastIndexOf(".")+1);
   if(!/^[0-9a-z]{8}$/.test(storeId))storeId="";
@@ -42,8 +52,7 @@
   }
 
   if(!code){
-    showMsg("로그인 정보가 없어 되돌아갑니다.");
-    setTimeout(finish,1500);
+    fail("로그인 정보가 없어요. 다시 시도해 주세요.");
     return;
   }
 
@@ -51,8 +60,7 @@
   try{savedState=sessionStorage.getItem("sj.kstate");sessionStorage.removeItem("sj.kstate")}catch(e){}
 
   if(!savedState||state!==savedState){
-    showMsg("로그인 확인값이 달라 중단했어요. 다시 시도해 주세요.");
-    setTimeout(finish,2000);
+    fail("로그인 확인값이 달라 중단했어요. 다시 시도해 주세요.");
     return;
   }
 
@@ -75,8 +83,7 @@
   })
   .then(function(j){
     if(!j||!j.token){
-      showMsg("로그인 처리에 실패했어요. 다시 시도해 주세요.");
-      setTimeout(finish,2000);
+      fail("로그인 처리에 실패했어요. 다시 시도해 주세요.");
       return;
     }
     try{
@@ -87,13 +94,12 @@
   })
   .catch(function(e){
     if(e.code==="INVALID_KAKAO_CODE"){
-      showMsg("카카오 로그인에 실패했어요. 다시 시도해 주세요.");
+      fail("카카오 로그인에 실패했어요. 다시 시도해 주세요.");
     }else if(e.code==="KAKAO_UNAVAILABLE"){
-      showMsg("카카오 서버와 통신하지 못했어요. 처음부터 다시 로그인해 주세요.");
+      fail("카카오 서버와 통신하지 못했어요. 처음부터 다시 로그인해 주세요.");
     }else{
-      showMsg("로그인 처리 중 오류가 발생했어요. 다시 시도해 주세요.");
+      fail("로그인 처리 중 오류가 발생했어요. 다시 시도해 주세요.");
     }
-    setTimeout(finish,2500);
   });
 })();
 </script>
