@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>로그인 처리 중</title>
+<link rel="stylesheet" href="/customer.css">
+<style>
+.auth{max-width:380px;margin:10vh auto 0;text-align:center}
+.auth h1{margin-bottom:8px}
+.auth p{color:var(--mute);margin:0;font-size:.9rem}
+.spinner{width:40px;height:40px;border:3px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="auth">
+  <div class="spinner"></div>
+  <h1>로그인 처리 중</h1>
+  <p id="msg">카카오 로그인을 확인하고 있습니다.</p>
+</div>
+<script src="../config.js"></script>
+<script>
+(function(){
+  var C=window.APP_CONFIG||{};
+  var qs=new URLSearchParams(location.search);
+  var code=qs.get("code");
+  var state=qs.get("state");
+  var msgEl=document.getElementById("msg");
+
+  function showMsg(text){
+    msgEl.textContent=text;
+  }
+
+  function finish(){
+    history.replaceState(null,"",location.pathname);
+    location.href="../../customer.html";
+  }
+
+  if(!code){
+    showMsg("로그인 정보가 없어 되돌아갑니다.");
+    setTimeout(finish,1500);
+    return;
+  }
+
+  var savedState=null;
+  try{savedState=sessionStorage.getItem("sj.kstate");sessionStorage.removeItem("sj.kstate")}catch(e){}
+
+  if(!savedState||state!==savedState){
+    showMsg("로그인 확인값이 달라 중단했어요. 다시 시도해 주세요.");
+    setTimeout(finish,2000);
+    return;
+  }
+
+  var apiOrigin=C.API_ORIGIN||"";
+  var acc=apiOrigin;
+
+  fetch(acc+"/auth/kakao/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({code:code})
+  })
+  .then(function(r){
+    if(!r.ok){
+      return r.json().then(function(j){
+        var err=(j&&j.error)||{};
+        throw{status:r.status,code:err.code||"HTTP_"+r.status,message:err.message||"요청에 실패했어요."};
+      });
+    }
+    return r.json();
+  })
+  .then(function(j){
+    if(!j||!j.token){
+      showMsg("로그인 처리에 실패했어요. 다시 시도해 주세요.");
+      setTimeout(finish,2000);
+      return;
+    }
+    try{
+      localStorage.setItem("sj.token",j.token);
+      localStorage.setItem("sj.nick",(j.user&&j.user.nickname)||"");
+    }catch(e){}
+    finish();
+  })
+  .catch(function(e){
+    if(e.code==="INVALID_KAKAO_CODE"){
+      showMsg("카카오 로그인에 실패했어요. 다시 시도해 주세요.");
+    }else if(e.code==="KAKAO_UNAVAILABLE"){
+      showMsg("카카오 서버와 통신하지 못했어요. 처음부터 다시 로그인해 주세요.");
+    }else{
+      showMsg("로그인 처리 중 오류가 발생했어요. 다시 시도해 주세요.");
+    }
+    setTimeout(finish,2500);
+  });
+})();
+</script>
+</body>
+</html>
