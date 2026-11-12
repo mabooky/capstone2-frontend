@@ -54,7 +54,7 @@ function clearAuth(){token=null;nick="";me=null;hist={items:[],total:0};ss("sj.t
 function unauth(e){if(e&&e.code==="CUSTOMER_UNAUTHORIZED"){clearAuth();return true}return false}
 async function logout(){try{await api(ACC+"/auth/logout",{method:"POST"})}catch(e){}clearAuth()}
 $("acct").onclick=function(e){
-  if(e.target.id==="login")login();else if(e.target.id==="out")logout();
+  if(e.target.closest("#login"))login();else if(e.target.id==="out")logout();
 };
 
 /* 화면 */
@@ -62,7 +62,7 @@ function canReq(){return !!token&&(!me||me.canRequest!==false)}
 function trow(t,btn){return '<div class="row"><span class="who"><span class="cov" style="--h:'+hue(String(t.title))+'" aria-hidden="true"></span><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(btn||"")+'</div>'}
 function rbtn(t){var s=t.requestStatus;return '<button class="btn" data-id="'+esc(t.spotifyId)+'"'+(s==="available"&&canReq()?"":" disabled")+'>'+(s==="available"?"신청":LB[s]||"신청")+'</button>'}
 function renderAcct(){
-  put("acct",token?'<span class="mute">'+esc(nick||"로그인됨")+' 님</span> <button class="btn sub" id="out">로그아웃</button>':'<button class="btn kakao" id="login">카카오로 로그인</button>');
+  put("acct",token?'<span class="mute">'+esc(nick||"로그인됨")+' 님</span> <button class="btn sub" id="out">로그아웃</button>':'<button class="kakao-login" id="login" aria-label="카카오 로그인"><img src="/assets/kakao/kakao_login_kr_small.svg" alt="" width="112" height="46"></button>');
   $("cmsg").textContent=!token?"로그인하면 곡을 신청하고 이전 신청 이력을 볼 수 있어요.":me&&me.reason==="MY_REQUEST_PENDING"?"내 신청곡이 대기 중이에요. 재생이 시작되면 다시 신청할 수 있어요.":"";
 }
 function renderCat(){
