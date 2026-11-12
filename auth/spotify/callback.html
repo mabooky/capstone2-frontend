@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spotify 연결 중</title>
+<link rel="stylesheet" href="/owner.css">
+<style>
+.auth{max-width:380px;margin:10vh auto 0;text-align:center}
+.auth p{color:var(--mute);margin:0;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="auth">
+  <h1>Spotify 연결 중</h1>
+  <p>점주 화면으로 이동하고 있습니다.</p>
+</div>
+<script>
+(function(){
+  var qs=new URLSearchParams(location.search);
+  /* state는 "<난수>.<매장ID>" 형식입니다. 매장 ID는 되돌아갈 주소에만 쓰므로 검증 전에 읽어도 됩니다.
+     code, state, error는 그대로 넘기고, 토큰 교환과 state 확인은 점주 화면(owner.js)이 합니다. */
+  var state=qs.get("state")||"";
+  var storeId=state.slice(state.lastIndexOf(".")+1);
+  if(!/^[0-9a-z]{8}$/.test(storeId))storeId="";
+
+  var next=new URLSearchParams();
+  if(storeId)next.set("store",storeId);
+  ["code","state","error"].forEach(function(k){if(qs.has(k))next.set(k,qs.get(k))});
+  location.replace("/owner.html?"+next.toString());
+})();
+</script>
+</body>
+</html>

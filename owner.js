@@ -188,7 +188,7 @@ function b64u(buf){return btoa(String.fromCharCode.apply(null,new Uint8Array(buf
 function spRedirect(){return C.SPOTIFY_REDIRECT_URI||location.origin+location.pathname}
 async function spLogin(){
   if(!C.SPOTIFY_CLIENT_ID){pm("Spotify를 쓰려면 config.js에 SPOTIFY_CLIENT_ID를 채워 주세요.");return}
-  var v=b64u(crypto.getRandomValues(new Uint8Array(48))),st=b64u(crypto.getRandomValues(new Uint8Array(12)));
+  var v=b64u(crypto.getRandomValues(new Uint8Array(48))),st=b64u(crypto.getRandomValues(new Uint8Array(12)))+"."+STORE; // 콜백 페이지가 주소에 ?store=를 붙일 수 없어서, state 뒤에 매장 ID를 실어 돌려받습니다.
   var ch=b64u(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v)));
   try{sessionStorage.setItem("sp.v",v);sessionStorage.setItem("sp.s",st)}catch(e){}
   location.href="https://accounts.spotify.com/authorize?"+new URLSearchParams({response_type:"code",client_id:C.SPOTIFY_CLIENT_ID,
