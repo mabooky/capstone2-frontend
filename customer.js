@@ -1,6 +1,8 @@
 (function(){
 var C=window.APP_CONFIG||{},$=function(i){return document.getElementById(i)};
 function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}return null}
+/* 직전에 그린 HTML과 같으면 DOM을 건드리지 않습니다. 폴링마다 목록을 다시 만들지 않기 위해 씁니다. */
+function put(id,html){var el=$(id);if(el._h===html)return;el._h=html;el.innerHTML=html}
 function esc(x){return String(x==null?"":x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 /* 곡 제목에서 항상 같은 색조(0~359)를 만듭니다. 음반 레이블 색에 씁니다. */
 function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h%360}
@@ -60,19 +62,19 @@ function canReq(){return !!token&&(!me||me.canRequest!==false)}
 function trow(t,btn){return '<div class="row"><span class="who"><span class="cov" style="--h:'+hue(String(t.title))+'" aria-hidden="true"></span><span><b>'+esc(t.title)+'</b><span class="mute">'+esc(t.artist)+' · '+fmt(t.duration)+'</span></span></span>'+(btn||"")+'</div>'}
 function rbtn(t){var s=t.requestStatus;return '<button class="btn" data-id="'+esc(t.spotifyId)+'"'+(s==="available"&&canReq()?"":" disabled")+'>'+(s==="available"?"신청":LB[s]||"신청")+'</button>'}
 function renderAcct(){
-  $("acct").innerHTML=token?'<span class="mute">'+esc(nick||"로그인됨")+' 님</span> <button class="btn sub" id="out">로그아웃</button>':'<button class="btn kakao" id="login">카카오로 로그인</button>';
+  put("acct",token?'<span class="mute">'+esc(nick||"로그인됨")+' 님</span> <button class="btn sub" id="out">로그아웃</button>':'<button class="btn kakao" id="login">카카오로 로그인</button>');
   $("cmsg").textContent=!token?"로그인하면 곡을 신청하고 이전 신청 이력을 볼 수 있어요.":me&&me.reason==="MY_REQUEST_PENDING"?"내 신청곡이 대기 중이에요. 재생이 시작되면 다시 신청할 수 있어요.":"";
 }
 function renderCat(){
-  $("cl").innerHTML=cat.length?cat.map(function(t){return trow(t,rbtn(t))}).join(""):'<div class="mute">점주님이 아직 카탈로그를 만들지 않았어요.</div>';
+  put("cl",cat.length?cat.map(function(t){return trow(t,rbtn(t))}).join(""):'<div class="mute">점주님이 아직 카탈로그를 만들지 않았어요.</div>');
 }
 function renderSearch(){
-  if(!sr){$("sr").innerHTML="";return}
-  $("sr").innerHTML=sr.tracks.length?sr.tracks.map(function(t){return trow(t,rbtn(t))}).join(""):'<div class="mute">'+esc(sr.err||"등록되지 않은 곡입니다.")+'</div>';
+  if(!sr){put("sr","");return}
+  put("sr",sr.tracks.length?sr.tracks.map(function(t){return trow(t,rbtn(t))}).join(""):'<div class="mute">'+esc(sr.err||"등록되지 않은 곡입니다.")+'</div>');
 }
 function renderPlay(){
-  $("np").innerHTML=now?trow(now.track)+'<div class="bar"><i id="fill"></i></div><div class="mute" id="pt"></div>':'<div class="mute">재생 중인 곡이 없어요.</div>';
-  $("ql").innerHTML=queue.length?queue.map(function(e,i){return trow(e.track,(e.mine?'<span class="badge s-ok">내 신청</span>':'<span class="mute">'+(i+1)+'번째</span>'))}).join(""):'<div class="mute">대기 중인 곡이 없어요.</div>';
+  put("np",now?trow(now.track)+'<div class="bar"><i id="fill"></i></div><div class="mute" id="pt"></div>':'<div class="mute">재생 중인 곡이 없어요.</div>');
+  put("ql",queue.length?queue.map(function(e,i){return trow(e.track,(e.mine?'<span class="badge s-ok">내 신청</span>':'<span class="mute">'+(i+1)+'번째</span>'))}).join(""):'<div class="mute">대기 중인 곡이 없어요.</div>');
   renderProg();
 }
 function renderProg(){
@@ -81,8 +83,8 @@ function renderProg(){
   $("fill").style.width=(p/now.track.duration*100)+"%";$("pt").textContent=fmt(p)+" / "+fmt(now.track.duration);
 }
 function renderHist(){
-  $("hl").innerHTML=!token?'<div class="mute">로그인하면 이전에 신청한 곡을 볼 수 있어요.</div>':hist.items.length?hist.items.map(function(r){
-    return trow(r.track,'<span class="mute">'+esc(r.storeName)+'<br>'+new Date(r.requestedAt).toLocaleDateString("ko-KR")+'</span>')}).join(""):'<div class="mute">아직 신청한 곡이 없어요.</div>';
+  put("hl",!token?'<div class="mute">로그인하면 이전에 신청한 곡을 볼 수 있어요.</div>':hist.items.length?hist.items.map(function(r){
+    return trow(r.track,'<span class="mute">'+esc(r.storeName)+'<br>'+new Date(r.requestedAt).toLocaleDateString("ko-KR")+'</span>')}).join(""):'<div class="mute">아직 신청한 곡이 없어요.</div>');
   $("more").hidden=!(token&&hist.items.length<hist.total);
 }
 function renderAll(){renderAcct();renderCat();renderSearch();renderPlay();renderHist()}
