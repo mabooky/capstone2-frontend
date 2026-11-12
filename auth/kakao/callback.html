@@ -80,8 +80,8 @@
       return;
     }
     try{
-      localStorage.setItem("sj.token",j.token);
-      localStorage.setItem("sj.nick",(j.user&&j.user.nickname)||"");
+      sessionStorage.setItem("sj.token",j.token);
+      sessionStorage.setItem("sj.nick",(j.user&&j.user.nickname)||"");
     }catch(e){}
     finish();
   })

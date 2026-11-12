@@ -1,18 +1,17 @@
 (function(){
 var C=window.APP_CONFIG||{},$=function(i){return document.getElementById(i)};
-function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null}
+function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}return null}
 function esc(x){return String(x==null?"":x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fmt(ms){var x=Math.max(0,Math.floor(ms/1000));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")}
 
 var qs=new URLSearchParams(location.search);
-if(qs.get("store"))ls("sj.store",qs.get("store"));
 var STORE=qs.get("store");
 if(!STORE){
   $("access-error").hidden=false;
   return;
 }
 var ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
-var token=ls("sj.token"),nick=ls("sj.nick")||"",hash=null,cat=[],now=null,queue=[],skew=0,me=null,hist={items:[],total:0},sr=null,polling=false;
+var token=ss("sj.token"),nick=ss("sj.nick")||"",hash=null,cat=[],now=null,queue=[],skew=0,me=null,hist={items:[],total:0},sr=null,polling=false;
 var LB={"out-of-mood":"범위 밖","already-queued":"대기 중","now-playing":"재생 중","recently-played":"최근 재생됨"};
 
 async function api(url,o){
@@ -44,10 +43,10 @@ async function callback(){
   if(!saved||st!==saved){msg("로그인 확인값이 달라 중단했어요. 다시 시도해 주세요.");return}
   try{
     var r=await api(ACC+"/auth/kakao/login",{method:"POST",body:{code:code},noauth:true});
-    token=r.token;nick=(r.user&&r.user.nickname)||"";ls("sj.token",token);ls("sj.nick",nick);
+    token=r.token;nick=(r.user&&r.user.nickname)||"";ss("sj.token",token);ss("sj.nick",nick);
   }catch(e){msg(e.code==="INVALID_KAKAO_CODE"?"카카오 로그인에 실패했어요. 다시 시도해 주세요.":e.code==="KAKAO_UNAVAILABLE"?"카카오 서버와 통신하지 못했어요. 처음부터 다시 로그인해 주세요.":e.message)}
 }
-function clearAuth(){token=null;nick="";me=null;hist={items:[],total:0};ls("sj.token",null);ls("sj.nick",null);renderAll()}
+function clearAuth(){token=null;nick="";me=null;hist={items:[],total:0};ss("sj.token",null);ss("sj.nick",null);renderAll()}
 function unauth(e){if(e&&e.code==="CUSTOMER_UNAUTHORIZED"){clearAuth();return true}return false}
 async function logout(){try{await api(ACC+"/auth/logout",{method:"POST"})}catch(e){}clearAuth()}
 $("acct").onclick=function(e){

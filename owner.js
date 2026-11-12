@@ -1,19 +1,18 @@
 (function(){
 var C=window.APP_CONFIG||{},$=function(i){return document.getElementById(i)};
-function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null}
+function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}return null}
 function esc(x){return String(x==null?"":x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fmt(ms){var x=Math.max(0,Math.floor(ms/1000));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0")}
 function num(x,lo,hi){x=parseFloat(x);return isNaN(x)?0:Math.max(lo,Math.min(hi,x))}
 
 var qs=new URLSearchParams(location.search);
-if(qs.get("store"))ls("ad.store",qs.get("store"));
 var STORE=qs.get("store");
 if(!STORE){
   $("access-error").hidden=false;
   return;
 }
 var ACC=C.API_ORIGIN,BASE=ACC+"/stores/"+encodeURIComponent(STORE);
-var adm=ls("ad.token"),hash=null,cat=[],now=null,queue=[],skew=0,polling=false;
+var adm=ss("ad.token"),hash=null,cat=[],now=null,queue=[],skew=0,polling=false;
 var cfg={mode:"seeds",seeds:[],vMin:-0.5,vMax:0.5,eMin:-0.5,eMax:0.5,n:30},sres=[],pv=[];
 
 async function api(url,o){
@@ -29,7 +28,7 @@ function show(v){$("login").hidden=v!=="login";$("app").hidden=v!=="app"}
 /* 관리자 토큰이 무효하면(다른 기기에서 로그인 등) 재생을 멈추고 로그인 화면으로 */
 function adminErr(e){
   if(e&&(e.code==="UNAUTHORIZED")){
-    adm=null;ls("ad.token",null);
+    adm=null;ss("ad.token",null);
     if(player){try{player.disconnect()}catch(x){}player=null;dev=null}
     show("login");$("lerr").textContent="관리자 세션이 끝났어요. 다시 로그인해 주세요.";return true;
   }
@@ -40,11 +39,11 @@ function adminErr(e){
 $("lbtn").onclick=async function(){
   try{
     var r=await api(BASE+"/admin/login",{method:"POST",body:{password:$("lp").value}});
-    adm=r.token;ls("ad.token",adm);$("lp").value="";$("lerr").textContent="";enter();
+    adm=r.token;ss("ad.token",adm);$("lp").value="";$("lerr").textContent="";enter();
   }catch(e){$("lerr").textContent=e.code==="INVALID_CREDENTIALS"?"비밀번호가 맞지 않아요.":e.code==="STORE_NOT_FOUND"?"등록되지 않은 매장 ID예요.":e.message}
 };
 $("lp").onkeydown=function(e){if(e.key==="Enter")$("lbtn").click()};
-$("out").onclick=function(){adm=null;ls("ad.token",null);if(player){try{player.disconnect()}catch(x){}player=null;dev=null}show("login")};
+$("out").onclick=function(){adm=null;ss("ad.token",null);if(player){try{player.disconnect()}catch(x){}player=null;dev=null}show("login")};
 function enter(){show("app");renderCfg();loadMood();spInit();poll()}
 
 /* ───── 분위기 영역 (PUT /admin/mood, GET /admin/mood/preview) ───── */
@@ -182,7 +181,7 @@ async function poll(){
 }
 
 /* ───── Spotify 연결 (PKCE) 과 Web Playback SDK ───── */
-var SP={t:ls("sp.t"),r:ls("sp.r"),x:+ls("sp.x")||0},player=null,dev=null,curId=null,ended=false,armed=false,busy=false,ps=null;
+var SP={t:ss("sp.t"),r:ss("sp.r"),x:+ss("sp.x")||0},player=null,dev=null,curId=null,ended=false,armed=false,busy=false,ps=null;
 function pm(m){$("pmsg").textContent=m||""}
 function spst(m){$("spst").textContent=m||""}
 function b64u(buf){return btoa(String.fromCharCode.apply(null,new Uint8Array(buf))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
@@ -198,7 +197,7 @@ async function spLogin(){
 }
 function spSave(j){
   SP.t=j.access_token;SP.x=Date.now()+j.expires_in*1000;if(j.refresh_token)SP.r=j.refresh_token;
-  ls("sp.t",SP.t);ls("sp.x",String(SP.x));ls("sp.r",SP.r);
+  ss("sp.t",SP.t);ss("sp.x",String(SP.x));ss("sp.r",SP.r);
 }
 async function spCallback(){
   var code=qs.get("code");if(!code)return;
@@ -231,7 +230,7 @@ function spInit(){
     player.addListener("ready",function(d){dev=d.device_id;spst("재생 준비 완료");$("rs").disabled=$("nx").disabled=false});
     player.addListener("not_ready",function(){dev=null;spst("연결이 끊겼어요");$("rs").disabled=$("nx").disabled=true});
     player.addListener("account_error",function(){spst("Premium 계정이 필요해요")});
-    player.addListener("authentication_error",function(){SP.t=null;ls("sp.t",null);spst("Spotify 다시 연결 필요")});
+    player.addListener("authentication_error",function(){SP.t=null;ss("sp.t",null);spst("Spotify 다시 연결 필요")});
     player.addListener("initialization_error",function(e){spst(e.message)});
     player.addListener("player_state_changed",onState);
     player.connect();
