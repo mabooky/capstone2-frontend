@@ -64,8 +64,8 @@ function bad(){
   return "";
 }
 function statusText(r){
-  return r.status==="complete"?"영역 안 후보 "+r.candidateCount+"곡 중 "+r.returnedCount+"곡을 뽑았어요."
-    :r.status==="insufficient-candidates"?"후보가 "+r.candidateCount+"곡뿐이라 "+r.returnedCount+"곡만 담을 수 있어요."
+  return r.status==="complete"?"영역 안 후보 "+r.candidateCount+"곡 중 "+r.tracks.length+"곡을 뽑았어요."
+    :r.status==="insufficient-candidates"?"후보가 "+r.candidateCount+"곡뿐이라 "+r.tracks.length+"곡만 담을 수 있어요."
     :"영역 안에 후보가 없어요. 영역을 다시 설정해 주세요.";
 }
 var pAbort=null,pTm=null;
