@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>고객 - 음악 신청</title>
+<link rel="stylesheet" href="customer.css">
+</head>
+<body>
+<div id="app" class="wrap">
+  <div class="top"><div><h1 id="sname">음악 신청</h1><span class="mute" id="cmsg"></span></div><div id="acct"></div></div>
+  <p class="err" id="cfg" role="alert"></p>
+  <div class="cols">
+    <section class="card">
+      <h2>신청할 곡</h2>
+      <input class="in" id="q" type="search" placeholder="곡 제목이나 아티스트 검색" aria-label="곡 검색" autocomplete="off">
+      <div id="sr"></div>
+      <div class="cap">오늘의 카탈로그</div>
+      <div id="cl" class="sc"></div>
+      <p class="mute" id="msg" role="status"></p>
+    </section>
+    <div class="side">
+      <section class="card"><h2>지금 재생 중</h2><div id="np"></div><div class="cap">재생 목록 (대기열)</div><div id="ql" class="sc"></div></section>
+      <section class="card"><h2>내 신청 이력</h2><div id="hl" class="sc"></div><button class="btn sub" id="more" hidden>더 보기</button></section>
+    </div>
+  </div>
+</div>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+<script src="config.js"></script>
+<script src="customer.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>점주 - 분위기 카탈로그와 재생</title>
+<link rel="stylesheet" href="owner.css">
+</head>
+<body>
+<main id="login" class="card auth">
+  <h1>점주 로그인</h1>
+  <p class="mute" id="lstore"></p>
+  <input class="in" id="lp" type="password" placeholder="점주 비밀번호" aria-label="점주 비밀번호">
+  <p class="err" id="lerr" role="alert"></p>
+  <button class="btn full" id="lbtn">로그인</button>
+</main>
+
+<div id="app" class="wrap" hidden>
+  <div class="top"><div><h1 id="sname">점주 화면</h1><span class="mute">분위기 설정 · 재생 · 대기열 관리</span></div><button class="btn sub" id="out">로그아웃</button></div>
+  <div class="cols">
+    <section class="card">
+      <h2>분위기 영역 설정</h2>
+      <div class="tabs"><button class="btn" id="m1">① 기준곡 (3곡 이상)</button><button class="btn sub" id="m2">② 분위기 범위</button></div>
+      <svg id="plot" viewBox="-10 -4 116 118" role="img" aria-label="정서와 에너지 좌표에 미리보기 곡이 찍힌 그래프"></svg>
+      <div class="legend"><span>● 미리보기 곡</span><span>◎ 기준곡</span><span>▭ 범위</span></div>
+      <div id="c1">
+        <input class="in" id="q" type="search" placeholder="기준곡 검색 (제목 또는 아티스트)" aria-label="기준곡 검색" autocomplete="off">
+        <div id="sr"></div>
+        <div class="cap">선택한 기준곡</div>
+        <div id="seeds"></div>
+      </div>
+      <div id="c2" hidden>
+        <div class="cap">정서(Valence) 범위 −1 ~ 1</div>
+        <div class="acts"><label class="fld">최소 <input class="in" id="v0" type="number" min="-1" max="1" step="0.05"></label><label class="fld">최대 <input class="in" id="v1" type="number" min="-1" max="1" step="0.05"></label></div>
+        <div class="cap">에너지(Arousal) 범위 −1 ~ 1</div>
+        <div class="acts"><label class="fld">최소 <input class="in" id="e0" type="number" min="-1" max="1" step="0.05"></label><label class="fld">최대 <input class="in" id="e1" type="number" min="-1" max="1" step="0.05"></label></div>
+      </div>
+      <p class="mute" id="cnt"></p>
+      <div class="grow"><label class="fld">카탈로그 곡 수 <input class="in" id="n" type="number" min="1" max="100" step="1"></label><button class="btn" id="apply">이 영역으로 카탈로그 만들기</button></div>
+      <p class="note" id="gmsg" role="status"></p>
+    </section>
+    <div class="side">
+      <section class="card">
+        <h2>재생 <span class="mute" id="spst"></span></h2>
+        <div id="np"></div>
+        <div class="pills"><button class="btn sub" id="spb">Spotify 연결</button><button class="btn" id="rs" disabled>재생 시작/재개</button><button class="btn sub" id="nx" disabled>다음 곡 ⏭</button></div>
+        <p class="note" id="pmsg" role="status"></p>
+        <p class="note">Spotify Premium 계정이 필요해요. 서버가 재생 위치를 기억하지 않아서 일시정지는 지원하지 않아요.</p>
+      </section>
+      <section class="card"><h2>재생 목록 <span class="mute" id="qc"></span></h2><div id="ql" class="sc"></div></section>
+      <section class="card"><h2>현재 카탈로그 <span class="mute" id="cc"></span></h2><div id="cl" class="sc"></div></section>
+    </div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="owner.js"></script>
+</body>
+</html>
